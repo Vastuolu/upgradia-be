@@ -1,12 +1,10 @@
 import { Router, Request, Response } from 'express'
-import response from '../../helper/response'
-import { postMethod, putMethod } from './controller'
+import { getMethod ,getMethodId,postMethod, putMethod, deleteMethod } from './controller'
 
 export const userRoutes = Router()
 
-userRoutes.get('/', (req: Request, res: Response)=>{
-    return response(200, "This is User Routes", null, res)
-})
-
+userRoutes.get('/', getMethod)
+userRoutes.get('/:id', getMethodId)
 userRoutes.post('/', postMethod)
 userRoutes.put('/:id', putMethod)
+userRoutes.delete('/:id', deleteMethod)

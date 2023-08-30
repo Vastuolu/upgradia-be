@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Response, Request, NextFunction } from 'express';
-import respond from '../helper/response'
+import {respond} from '../helper/response'
 dotenv.config()
 const SECRET: jwt.Secret = process.env.SECRET || 'Secret';
 
@@ -26,7 +26,7 @@ export function auth(req: Request, res:Response, next: NextFunction){
         const token:string = authHeader.split(' ')[1]
         jwt.verify(token, SECRET, (err:any, user:any)=>{
             if(err){
-                return respond(400, "Invalid Token", null, res)            }
+                return respond(400, true, "Invalid Token", null, res)            }
             // req.user = user
             next()
         })
