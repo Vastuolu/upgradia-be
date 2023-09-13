@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import {respond} from '../../helper/response'
-import { getProjectById, getProjects, createProject, updateProject, deleteProject } from './service.project'
+import { getProjectById, getProjects, createProject, updateProject, deleteProject, saveFilePath } from './service.project'
 
 export async function getMethod(req:Request, res:Response) {
     const {data, message, status, isError} = await getProjects()
@@ -38,4 +38,14 @@ export async function putMethod(req:Request, res:Response) {
 export async function deleteMethod(req:Request, res:Response) {
     const {data, message, status, isError} = await deleteProject(parseInt(req.params.id))
     return respond(status,isError, message, data, res)
+}
+
+export async function controllerUploadFile(req: Request, res:Response){
+    const filePath = res.locals.filePath
+    try {
+        const savedFile = await saveFilePath(filePath)
+        return respond(200, false, "Success", null , res)
+    } catch (error) {
+        return respond(500, true, "Failed save file path", null, res)
+    }
 }
