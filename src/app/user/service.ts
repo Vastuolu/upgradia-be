@@ -9,9 +9,9 @@ const prisma = new PrismaClient()
 export async function getUsers(){
     try {
         const gettedUser = await prisma.user.findMany()
-        return retHandler(200, false, "Get User Success", gettedUser)
+        return retHandler(200, false, "Get Users Success", gettedUser)
     } catch (error) {
-        return retHandler(500, true, "Get User Error", {error: error})
+        return retHandler(500, true, "Get Users Error", {error: error})
     }
 }
 
@@ -62,6 +62,8 @@ export async function userUpdate({id, username, email, password}:UserInterface){
 
 export async function userDelete(id:string) {
     try {
+        const findUser = await prisma.user.findUnique({where:{id:id}})
+        if(!findUser) return retHandler(404, true, "User Not Found", null)
         await prisma.user.delete({where:{id:id}})
         return retHandler(200, false, "Delete User Success", null)
     } catch (error) {

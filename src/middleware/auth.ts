@@ -27,8 +27,8 @@ export function auth(req: Request, res:Response, next: NextFunction){
         jwt.verify(token, SECRET, (err:any, user:any)=>{
             if(err){
                 return respond(400, true, "Invalid Token", null, res)            }
-            // req.user = user
+                // req.user = user 
             next()
         })
-    }
+    }return respond(403, true, "Forbidden", null, res)
 }
