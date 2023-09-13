@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,41 +8,49 @@ datasource db {
 }
 
 model User {
-  id String @id @unique
+  id       String  @id @unique
   username String?
-  email String @unique
+  email    String  @unique
   password String
 }
 
-model ContentImg{
-  id Int @id @default(autoincrement())
-  title String
-  url String
-  blog Blog @relation(fields: [blogId], references: [id])
+model ContentImg {
+  id     Int    @id @default(autoincrement())
+  title  String
+  url    String
   blogId Int
+  blog   Blog   @relation(fields: [blogId], references: [id])
+
+  @@index([blogId], map: "ContentImg_blogId_fkey")
 }
 
-model ContentParagraph{
-  id Int @id @default(autoincrement())
-  text String @db.VarChar(255)
-  paragraphOf Int 
-  blog Blog @relation(fields: [blogId], references: [id])
-  blogId Int
+model ContentParagraph {
+  id          Int    @id @default(autoincrement())
+  text        String @db.VarChar(255)
+  paragraphOf Int
+  blogId      Int
+  blog        Blog   @relation(fields: [blogId], references: [id])
+
+  @@index([blogId], map: "ContentParagraph_blogId_fkey")
 }
 
 model Blog {
-  id Int @id @default(autoincrement())
-  title String 
+  id          Int                @id @default(autoincrement())
+  title       String
   description String
-  images ContentImg[]
-  paragraph ContentParagraph[]
+  images      ContentImg[]
+  paragraph   ContentParagraph[]
 }
 
 model Project {
-  id Int @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   title String
   image String
-  url String
+  url   String
 }
 
-
+model File {
+  id Int @id @default(autoincrement())
+  filename String
+  path String
+}
