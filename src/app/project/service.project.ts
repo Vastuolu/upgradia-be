@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import {ProjectInterface} from './interfaces.project'
 import { returnHandler as retHandler } from "../../helper/response";
 import { v4 as idmaker } from "uuid";
+import path from 'path'
 
 const prisma = new PrismaClient()
 
@@ -63,5 +64,19 @@ export async function deleteProject(id:number) {
         return retHandler(200, false, "Delete Project Success", null)
     } catch (error) {
         return retHandler(500, true, "Delete Project Error", {error:error})
+    }
+}
+
+
+export async function saveFilePath(filepath:string){
+    try {
+        const createdFile = await prisma.file.create({
+            data: {
+                filename: path.basename(filepath),
+                path: filepath
+            }
+        })
+    } catch (error) {
+        
     }
 }
