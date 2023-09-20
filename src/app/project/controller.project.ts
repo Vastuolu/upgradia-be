@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import {respond} from '../../helper/response'
-import { getProjectById, getProjects, createProject, updateProject, deleteProject, saveFilePath } from './service.project'
+import { getProjectById, getProjects, createProject, updateProject, deleteProject} from './service.project'
 
 export async function getMethod(req:Request, res:Response) {
     const {data, message, status, isError} = await getProjects()
