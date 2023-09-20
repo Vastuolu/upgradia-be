@@ -68,4 +68,15 @@ export async function deleteProject(id:number) {
 }
 
 
-
+export async function saveFilePath(filepath:string){
+    try {
+        const createdFile = await prisma.file.create({
+            data: {
+                filename: path.basename(filepath),
+                path: filepath
+            }
+        })
+    } catch (error) {
+        
+    }
+}
