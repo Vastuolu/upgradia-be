@@ -11,6 +11,7 @@ const prisma = new PrismaClient()
 export async function getUsers(){
     try {
         const gettedUser = await prisma.user.findMany()
+        if(!gettedUser) return retHandler(404, true, "Table User is empty", null)
         return retHandler(200, false, "Get Users Success", gettedUser)
     } catch (error) {
         return retHandler(500, true, "Get Users Error", {error: error})
@@ -27,7 +28,7 @@ export async function getUserById(id: string){
     }
 }
 
-export async function userCreate(username: string, email: string, password1: string) {
+export async function createUser(username: string, email: string, password1: string) {
     const password = await hashing(password1); // Await the hashing function
     try {
         const createdUser = await prisma.user.create({
@@ -45,7 +46,7 @@ export async function userCreate(username: string, email: string, password1: str
 }
 
 
-export async function userUpdate({id, username, email, password}:UserInterface){
+export async function updateUser({id, username, email, password}:UserInterface){
     try {
         const findUser = await prisma.user.findUnique({where:{id:id}})
         if(!findUser)return retHandler(404, true, "User Not Found", null) 
@@ -62,7 +63,7 @@ export async function userUpdate({id, username, email, password}:UserInterface){
     }
 }
 
-export async function userDelete(id:string) {
+export async function deleteUser(id:string) {
     try {
         const findUser = await prisma.user.findUnique({where:{id:id}})
         if(!findUser) return retHandler(404, true, "User Not Found", null)
