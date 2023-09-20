@@ -40,3 +40,12 @@ export async function deleteMethod(req:Request, res:Response) {
     return respond(status,isError, message, data, res)
 }
 
+export async function controllerUploadFile(req: Request, res:Response){
+    const filePath = res.locals.filePath
+    try {
+        const savedFile = await saveFilePath(filePath)
+        return respond(200, false, "Success", null , res)
+    } catch (error) {
+        return respond(500, true, "Failed save file path", null, res)
+    }
+}
