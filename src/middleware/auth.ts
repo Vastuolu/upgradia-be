@@ -5,7 +5,7 @@ import {respond} from '../helper/response'
 dotenv.config()
 const SECRET: jwt.Secret = process.env.SECRET || 'Secret';
 
-export function sign(id: number, name: string){
+export function sign(id: string, name: string){
     try {
         const data = {
             id: id,
