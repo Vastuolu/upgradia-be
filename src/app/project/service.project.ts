@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import {ProjectInterface} from './interfaces.project'
 import { returnHandler as retHandler } from "../../helper/response";
-import { v4 as idmaker } from "uuid";
 import path from 'path'
 
 const prisma = new PrismaClient()
@@ -9,7 +7,7 @@ const prisma = new PrismaClient()
 export async function getProjects(){
     try {
         const gettedProject = await prisma.project.findMany()
-        if(gettedProject==null) return retHandler(404, true, "Table Project is empty", null)
+        if(!gettedProject) return retHandler(404, true, "Table Project is empty", null)
         return retHandler(200, false, "Get Project Success", gettedProject)
     } catch (error) {
         return retHandler(500, true, "Get Projects Error", {error: error})
