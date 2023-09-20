@@ -8,8 +8,9 @@ const prisma = new PrismaClient()
 
 export async function getProjects(){
     try {
-        const data = await prisma.project.findMany()
-        return retHandler(200, false, "Get Project Success", data)
+        const gettedProject = await prisma.project.findMany()
+        if(gettedProject==null) return retHandler(404, true, "Table Project is empty", null)
+        return retHandler(200, false, "Get Project Success", gettedProject)
     } catch (error) {
         return retHandler(500, true, "Get Projects Error", {error: error})
     }
@@ -17,9 +18,9 @@ export async function getProjects(){
 
 export async function getProjectById(id:number) {
     try {
-        const data = await prisma.project.findUnique({where:{id:id}})
-        if(!data) return retHandler(404, true, "Project Not Found", null)
-        return retHandler(200, false, "Get Project Success", data)
+        const gettedProject = await prisma.project.findUnique({where:{id:id}})
+        if(!gettedProject) return retHandler(404, true, "Project Not Found", null)
+        return retHandler(200, false, "Get Project Success", gettedProject)
     } catch (error) {
         return retHandler(500, true, "Get Project Error",{error:error})
     }

@@ -9,6 +9,7 @@ const prisma = new PrismaClient()
 export async function getUsers(){
     try {
         const gettedUser = await prisma.user.findMany()
+        if(gettedUser==null) return retHandler(404, true, "Table User is empty", null)
         return retHandler(200, false, "Get Users Success", gettedUser)
     } catch (error) {
         return retHandler(500, true, "Get Users Error", {error: error})
