@@ -3,6 +3,8 @@ import { hashing } from "../../middleware/hashing";
 import {returnHandler as retHandler} from '../../helper/response'
 import { v4 as idmaker } from 'uuid';
 import { UserInterface } from './interfaces'
+import bcrypt from 'bcrypt'
+import { sign } from "../../middleware/auth";
 
 const prisma = new PrismaClient()
 
@@ -71,4 +73,15 @@ export async function userDelete(id:string) {
     }
 }
 
-
+export async function login(email:string, password:string) {
+    try {
+        const getUser = await prisma.user.findUnique({where:{email:email}})
+        if(!getUser) return retHandler(404, true, "User Not Found", null)
+        const passwordMatch = await bcrypt.compare(password, getUser.password)
+        if(!passwordMatch) retHandler(403, true, "Password Wrong", null)
+        const token = sign(getUser.id, getUser.username as string)
+        return retHandler(200, false, "Login Success", {token: token})
+    } catch (error) {
+        return retHandler(500, true, "Delete User Error", {error: error})
+    }    
+}

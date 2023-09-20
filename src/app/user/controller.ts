@@ -2,7 +2,7 @@ import {Request, Response} from 'express'
 import {respond} from '../../helper/response'
 import { emailValidation } from '../../helper/emailValidation'
 import { hashing } from "../../middleware/hashing";
-import { userCreate, getUsers, getUserById, userUpdate, userDelete} from './service'
+import { userCreate, getUsers, getUserById, userUpdate, userDelete, login} from './service'
 
 export async function getMethod(res:Response) {
     const {data,message,status,isError} = await getUsers()
@@ -44,4 +44,10 @@ export async function putMethod(req:Request, res:Response){
 export async function deleteMethod(req:Request, res:Response) {
     const {data,isError,message,status} = await userDelete(req.params.id)
     return respond(status,isError, message, data, res)
+}
+
+export async function LoginMethod(req:Request, res:Response) {
+    const {email, password} = req.body
+    const {data,isError,message,status} = await login(email, password)
+    return respond(status,isError, message, data, res)    
 }
