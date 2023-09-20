@@ -14,32 +14,12 @@ model User {
   password String
 }
 
-model ContentImg {
-  id     Int    @id @default(autoincrement())
-  title  String
-  url    String
-  blogId Int
-  blog   Blog   @relation(fields: [blogId], references: [id])
-
-  @@index([blogId], map: "ContentImg_blogId_fkey")
-}
-
-model ContentParagraph {
-  id          Int    @id @default(autoincrement())
-  text        String @db.VarChar(255)
-  paragraphOf Int
-  blogId      Int
-  blog        Blog   @relation(fields: [blogId], references: [id])
-
-  @@index([blogId], map: "ContentParagraph_blogId_fkey")
-}
-
 model Blog {
   id          Int                @id @default(autoincrement())
   title       String
   description String
-  images      ContentImg[]
-  paragraph   ContentParagraph[]
+  images      String
+  paragraph   String
 }
 
 model Project {

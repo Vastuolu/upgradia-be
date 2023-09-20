@@ -2,7 +2,7 @@ import {Request, Response} from 'express'
 import {respond} from '../../helper/response'
 import { emailValidation } from '../../helper/emailValidation'
 import { hashing } from "../../middleware/hashing";
-import { userCreate, getUsers, getUserById, userUpdate, userDelete} from './service'
+import { createUser, getUsers, getUserById, updateUser, deleteUser} from './service'
 
 export async function getMethod(res:Response) {
     const {data,message,status,isError} = await getUsers()
