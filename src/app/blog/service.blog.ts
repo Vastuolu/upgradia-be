@@ -8,7 +8,6 @@ export async function getBlogs() {
     try {
         const gettedBlog = await prisma.blog.findMany()
         if(!gettedBlog || gettedBlog.length === 0) return retHandler(404, true, "Table Blog is empty", null)
-        console.log("data:", gettedBlog)
         return retHandler(200, false, "Get Blog Success", gettedBlog)
     } catch (error) {
         return retHandler(500, true, "Get Blog Error", {error:error})
