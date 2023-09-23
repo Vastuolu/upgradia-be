@@ -19,7 +19,7 @@ model Blog {
   title       String
   description String
   images      String
-  paragraph   String
+  paragraph   String @db.LongText
 }
 
 model Project {
