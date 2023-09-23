@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 export async function getProjects(){
     try {
         const gettedProject = await prisma.project.findMany()
-        if(!gettedProject) return retHandler(404, true, "Table Project is empty", null)
+        if(!gettedProject || gettedProject.length === 0) return retHandler(404, true, "Table Project is empty", null)
         return retHandler(200, false, "Get Project Success", gettedProject)
     } catch (error) {
         return retHandler(500, true, "Get Projects Error", {error: error})
