@@ -80,9 +80,10 @@ export async function login(email:string, password:string) {
         if(!getUser) return retHandler(404, true, "User Not Found", null)
         const passwordMatch = await bcrypt.compare(password, getUser.password)
         if(!passwordMatch) retHandler(403, true, "Password Wrong", null)
-        const token = sign(getUser.id, getUser.username as string)
+        const token = await sign(getUser.id, getUser.username as string)
         return retHandler(200, false, "Login Success", {token: token})
     } catch (error) {
-        return retHandler(500, true, "Delete User Error", {error: error})
+        console.log(error)
+        return retHandler(500, true, "Login Error", {error: error})
     }    
 }

@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { returnHandler as retHandler } from "../../helper/response";
-import { Zlib } from "zlib";
 
 const prisma = new PrismaClient()
 
@@ -30,7 +29,6 @@ export async function createBlog(title:string, description:string, images:string
             data:{
                 title: title,
                 description:description,
-                images: images,
                 paragraph: paragraph
             }
         })
@@ -48,7 +46,6 @@ export async function updateBlog(id:number, title:string, description:string, im
             where:{id:id}, data:{
                 title: title,
                 description:description,
-                images:images,
                 paragraph:paragraph
             }
         })
