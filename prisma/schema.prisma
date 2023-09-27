@@ -15,30 +15,30 @@ model User {
 }
 
 model Blog {
-  id          Int                @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   title       String
   description String
-  paragraph   String @db.LongText
+  paragraph   String       @db.LongText
   images      BlogImages[]
 }
 
 model Project {
-  id    Int    @id @default(autoincrement())
-  title String
-  url   String
+  id     Int             @id @default(autoincrement())
+  title  String
+  url    String
   images ProjectImages[]
 }
 
-model ProjectImages{
-  id String @id @unique
-  project Project @relation(fields: [projectId], references: [id])
+model ProjectImages {
+  id        String  @id @unique
+  project   Project @relation(fields: [projectId], references: [id])
   projectId Int
-  filename String
+  filename  String
 }
 
-model BlogImages{
-  id String @id @unique
-  blog Blog @relation(fields: [blogId], references: [id])
-  blogId Int
+model BlogImages {
+  id       String @id @unique
+  blog     Blog   @relation(fields: [blogId], references: [id])
+  blogId   Int
   filename String
 }
