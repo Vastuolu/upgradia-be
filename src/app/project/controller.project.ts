@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import {respond} from '../../helper/response'
-import { getProjectById, getProjects, createProject, updateProject, deleteProject } from './service.project'
+import { getProjectById, getProjects, createProject, updateProject, deleteProject} from './service.project'
 
 export async function getMethod(req:Request, res:Response) {
     const {data, message, status, isError} = await getProjects()
@@ -39,3 +39,4 @@ export async function deleteMethod(req:Request, res:Response) {
     const {data, message, status, isError} = await deleteProject(parseInt(req.params.id))
     return respond(status,isError, message, data, res)
 }
+
