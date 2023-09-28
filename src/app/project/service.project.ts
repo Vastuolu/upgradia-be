@@ -20,7 +20,6 @@ export async function getProjects(){
             }
             return mappedData
         }))
-        console.log(gettedData)
         return retHandler(200, false, "Get Project Success", gettedData)
     } catch (error) {
         return retHandler(500, true, "Get Projects Error", {error: error})
