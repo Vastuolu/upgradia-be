@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client"
 import multer from "multer"
 import path from 'path'
 import {v4 as idmaker} from 'uuid'
-
 import {returnHandler as retHandler} from '../../helper/response'
 const prisma = new PrismaClient()
 
@@ -18,29 +17,33 @@ const storage = multer.diskStorage({
 export const upload = multer({ storage })
 
 
-export async function saveFile(fileName:string, database:string, problogId:number, ){
+export async function saveFileProject(fileName:string, projectId:number, ){
     try{
-        if(database === "project"){
             const file = await prisma.projectImages.create({
                 data: {
                     id : idmaker(),
-                    projectId: problogId,
+                    projectId: projectId,
                     filename: fileName
-                    
                 }    
             })
             return retHandler(200, false, "Upload Image Succees", file)
-        }else if(database === "blog"){
+    }catch(error){
+        return retHandler(500, true, "Upload Image Error", {error:error})
+    }
+}
+
+
+export async function saveFileBlog(fileName:string, blogId:number, ){
+    try{
             const file = await prisma.blogImages.create({
                 data: {
                     id : idmaker(),
-                    blogId: problogId,
+                    blogId: blogId,
                     filename: fileName
                 }    
             })
             return retHandler(200, false, "Upload Image Succees", file)
-        }
     }catch(error){
-        retHandler(500, true, "Upload Image Error", {error:error})
+        return retHandler(500, true, "Upload Image Error", {error:error})
     }
 }
