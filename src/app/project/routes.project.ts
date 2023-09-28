@@ -6,7 +6,7 @@ export const projectRoutes = Router()
 
 projectRoutes.get('/',getMethod)
 projectRoutes.get('/:id',getMethodId)
-projectRoutes.post('/',postMethod)
-projectRoutes.put('/:id',putMethod)
-projectRoutes.delete('/:id',deleteMethod)
+projectRoutes.post('/',auth, postMethod)
+projectRoutes.put('/:id',auth, putMethod)
+projectRoutes.delete('/:id',auth, deleteMethod)
 
