@@ -12,14 +12,17 @@ export async function getProjects(){
         gettedProject.map(async project => {
             const projectId:number = project.id
             const gettedFile = await prisma.projectImages.findMany({where:{projectId:projectId}})
+            var images:Array<object> = gettedFile
+            if(!gettedFile) images = [{images:"No Images"}]
             const mappedData = {
                 id:projectId,
                 title: project.title,
-                url: project.title,
-                images: gettedFile
+                url: project.url,
+                description: project.description,
+                images: images
             }
             return mappedData
-        }))
+    }))
         return retHandler(200, false, "Get Project Success", gettedData)
     } catch (error) {
         return retHandler(500, true, "Get Projects Error", {error: error})
@@ -32,11 +35,14 @@ export async function getProjectById(id:number) {
         if(!gettedProject) return retHandler(404, true, "Project Not Found", null)
         const projectId:number = gettedProject.id
         const gettedFile = await prisma.projectImages.findMany({where:{projectId:projectId}})
+        var images:Array<object> = gettedFile
+        if(!gettedFile) images = [{images:"No Images"}]
         const gettedData = {
             id:projectId,
             title: gettedProject.title,
-            url: gettedProject.title,
-            images: gettedFile
+            url: gettedProject.url,
+            description: gettedProject.description,
+            images: images
         }
         return retHandler(200, false, "Get Project Success", gettedData)
     } catch (error) {
@@ -44,12 +50,14 @@ export async function getProjectById(id:number) {
     }
 }
 
-export async function createProject(title:string, image:string, url:string) {
+export async function createProject(title:string, url:string, description:string) {
     try {
         const createdProject = await prisma.project.create({
             data:{
                 title: title,
-                url: url}
+                url: url,
+                description: description
+            }
         })
         return retHandler(200, false, "Create Project Success", createdProject)
     } catch (error) {
@@ -57,14 +65,15 @@ export async function createProject(title:string, image:string, url:string) {
     }    
 }
 
-export async function updateProject(id:number, title:string, image:string, url:string) {
+export async function updateProject(id:number, title:string, url:string, description:string) {
     try {
         const findProject = await prisma.project.findUnique({where:{id:id}})
         if(!findProject) return retHandler(404, true, "Project Not Found", null)
         const updatedProject = await prisma.project.update({
             where:{id:id}, data:{
                 title:title,
-                url:url
+                url:url,
+                description:description
             }
         })
         return retHandler(200, false, "Update Project Success", updatedProject)

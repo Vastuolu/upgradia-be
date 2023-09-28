@@ -13,25 +13,26 @@ export async function getMethodId(req:Request, res:Response) {
 }
 
 export async function postMethod(req:Request, res:Response) {
-    const {title, image, url} = req.body
-    if(!title||!image||!url){
+    const {title, image, url, description} = req.body
+    if(!title||!image||!url||!description){
         return respond(400, true, "Some Fields are Still Empty", null, res)
     }
-    const {data, message, status, isError} = await createProject(title, image, url)
+    const {data, message, status, isError} = await createProject(title, url, description)
     return respond(status,isError, message, data, res)
 }
 
 export async function putMethod(req:Request, res:Response) {
     const id = parseInt(req.params.id)
-    const {title:nullTitle, image:nullImage, url:nullUrl} = req.body
-    let title, image, url
+    const {title:nullTitle, image:nullImage, url:nullUrl, description:nullDescription} = req.body
+    let title, image, url, description
     if(nullTitle) title = nullTitle
     if(nullImage) image = nullImage
     if(nullUrl) url = nullUrl
+    if(nullDescription) description = nullDescription
     // const inputData = {
     //    id,title, image, url
     // }
-    const {data, message, status, isError} = await updateProject(id, title, image, url)
+    const {data, message, status, isError} = await updateProject(id, title, url, description)
     return respond(status,isError, message, data, res)
 }
 
