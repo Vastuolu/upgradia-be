@@ -12,7 +12,6 @@ const port = process.env.PORT;
 
 app.use(express.json())
 app.use('/uploads', FileRoutes);
-app.use('/image', express.static("uploads"))
 
 app.use('/user', userRoutes)
 app.use('/project',projectRoutes)

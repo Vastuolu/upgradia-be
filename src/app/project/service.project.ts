@@ -8,7 +8,20 @@ export async function getProjects(){
     try {
         const gettedProject = await prisma.project.findMany()
         if(!gettedProject || gettedProject.length === 0) return retHandler(404, true, "Table Project is empty", null)
-        return retHandler(200, false, "Get Project Success", gettedProject)
+        const gettedData: Array<object> = await Promise.all(
+        gettedProject.map(async project => {
+            const projectId:number = project.id
+            const gettedFile = await prisma.projectImages.findMany({where:{projectId:projectId}})
+            const mappedData = {
+                id:projectId,
+                title: project.title,
+                url: project.title,
+                images: gettedFile
+            }
+            return mappedData
+        }))
+        console.log(gettedData)
+        return retHandler(200, false, "Get Project Success", gettedData)
     } catch (error) {
         return retHandler(500, true, "Get Projects Error", {error: error})
     }
@@ -18,7 +31,15 @@ export async function getProjectById(id:number) {
     try {
         const gettedProject = await prisma.project.findUnique({where:{id:id}})
         if(!gettedProject) return retHandler(404, true, "Project Not Found", null)
-        return retHandler(200, false, "Get Project Success", gettedProject)
+        const projectId:number = gettedProject.id
+        const gettedFile = await prisma.projectImages.findMany({where:{projectId:projectId}})
+        const gettedData = {
+            id:projectId,
+            title: gettedProject.title,
+            url: gettedProject.title,
+            images: gettedFile
+        }
+        return retHandler(200, false, "Get Project Success", gettedData)
     } catch (error) {
         return retHandler(500, true, "Get Project Error",{error:error})
     }

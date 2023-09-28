@@ -3,6 +3,7 @@ import multer from "multer"
 import path from 'path'
 import {v4 as idmaker} from 'uuid'
 import {returnHandler as retHandler} from '../../helper/response'
+import { NextFunction } from "express"
 const prisma = new PrismaClient()
 
 const storage = multer.diskStorage({
@@ -10,11 +11,16 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/')
     },
     filename: function (req, file, cb){
-        cb(null, Date.now() + path.extname(file.originalname))
+        cb(null, file.originalname)
     }
 })
 
-export const upload = multer({ storage })
+// export function upload(next:NextFunction){
+//     multer({storage:storage})
+//     return next()
+// }
+
+export const upload = multer({storage:storage})
 
 
 export async function saveFileProject(fileName:string, projectId:number, ){
@@ -28,6 +34,7 @@ export async function saveFileProject(fileName:string, projectId:number, ){
             })
             return retHandler(200, false, "Upload Image Succees", file)
     }catch(error){
+        console.log(error)
         return retHandler(500, true, "Upload Image Error", {error:error})
     }
 }
