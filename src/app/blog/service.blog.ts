@@ -7,7 +7,20 @@ export async function getBlogs() {
     try {
         const gettedBlog = await prisma.blog.findMany()
         if(!gettedBlog || gettedBlog.length === 0) return retHandler(404, true, "Table Blog is empty", null)
-        return retHandler(200, false, "Get Blog Success", gettedBlog)
+        const gettedData: Array<object> = await Promise.all(
+            gettedBlog.map(async blog => {
+                const blogId:number = blog.id
+                const gettedFile = await prisma.blogImages.findMany({where:{blogId:blogId}})
+                const mappedData = {
+                    id:blogId,
+                    title: blog.title,
+                    description: blog.description,
+                    paragraph: blog.paragraph,
+                    images: gettedFile
+                }
+                return mappedData
+            }))
+        return retHandler(200, false, "Get Blog Success", gettedData)
     } catch (error) {
         return retHandler(500, true, "Get Blog Error", {error:error})
     }
@@ -17,7 +30,16 @@ export async function getBlogById(id:number) {
     try {
         const gettedBlog = await prisma.blog.findUnique({where:{id:id}})
         if(!gettedBlog) return retHandler(404, true, "Blog Not Found", null)
-        return retHandler(200, false, "Get Blog Success", gettedBlog)
+        const blogId:number = gettedBlog.id
+        const gettedFile = await prisma.blogImages.findMany({where:{blogId:blogId}})
+        const gettedData = {
+            id:blogId,
+            title: gettedBlog.title,
+            description: gettedBlog.description,
+            paragraph: gettedBlog.paragraph,
+            images: gettedFile
+        }
+        return retHandler(200, false, "Get Blog Success", gettedData)
     } catch (error) {
         return retHandler(500, true, "Get Blog Error", {error: error})
     }
