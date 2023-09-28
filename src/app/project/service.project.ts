@@ -29,7 +29,6 @@ export async function createProject(title:string, image:string, url:string) {
         const createdProject = await prisma.project.create({
             data:{
                 title: title,
-                image: image,
                 url: url}
         })
         return retHandler(200, false, "Create Project Success", createdProject)
@@ -45,7 +44,6 @@ export async function updateProject(id:number, title:string, image:string, url:s
         const updatedProject = await prisma.project.update({
             where:{id:id}, data:{
                 title:title,
-                image:image,
                 url:url
             }
         })

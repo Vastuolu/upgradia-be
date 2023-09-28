@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { returnHandler as retHandler } from "../../helper/response";
-import { Zlib } from "zlib";
 
 const prisma = new PrismaClient()
 
@@ -8,7 +7,6 @@ export async function getBlogs() {
     try {
         const gettedBlog = await prisma.blog.findMany()
         if(!gettedBlog || gettedBlog.length === 0) return retHandler(404, true, "Table Blog is empty", null)
-        console.log("data:", gettedBlog)
         return retHandler(200, false, "Get Blog Success", gettedBlog)
     } catch (error) {
         return retHandler(500, true, "Get Blog Error", {error:error})
@@ -31,7 +29,6 @@ export async function createBlog(title:string, description:string, images:string
             data:{
                 title: title,
                 description:description,
-                images: images,
                 paragraph: paragraph
             }
         })
@@ -49,7 +46,6 @@ export async function updateBlog(id:number, title:string, description:string, im
             where:{id:id}, data:{
                 title: title,
                 description:description,
-                images:images,
                 paragraph:paragraph
             }
         })
