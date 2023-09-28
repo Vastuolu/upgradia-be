@@ -23,19 +23,19 @@ const storage = multer.diskStorage({
 export const upload = multer({storage:storage})
 
 
-export async function saveFileProject(fileName:string, projectId:number, ){
+export async function saveFileProject(files: string, projectId: number){
     try{
-            const file = await prisma.projectImages.create({
-                data: {
-                    id : idmaker(),
-                    projectId: projectId,
-                    filename: fileName
-                }    
-            })
-            return retHandler(200, false, "Upload Image Succees", file)
+           const file = await prisma.projectImages.create({
+            data:{
+                id: idmaker(),
+                projectId: projectId,
+                filename: files
+            }
+           })
+           console.log(files)
+           return file
     }catch(error){
-        console.log(error)
-        return retHandler(500, true, "Upload Image Error", {error:error})
+        return error
     }
 }
 
