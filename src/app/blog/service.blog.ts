@@ -11,14 +11,12 @@ export async function getBlogs() {
             gettedBlog.map(async blog => {
                 const blogId:number = blog.id
                 const gettedFile = await prisma.blogImages.findMany({where:{blogId:blogId}})
-                var images:Array<object> = gettedFile
-                if(!gettedFile) images = [{images:"No Images"}]
                 const mappedData = {
                     id:blogId,
                     title: blog.title,
                     description: blog.description,
                     paragraph: blog.paragraph,
-                    images: images
+                    images: gettedFile
                 }
                 return mappedData
             }))
@@ -34,14 +32,12 @@ export async function getBlogById(id:number) {
         if(!gettedBlog) return retHandler(404, true, "Blog Not Found", null)
         const blogId:number = gettedBlog.id
         const gettedFile = await prisma.blogImages.findMany({where:{blogId:blogId}})
-        var images:Array<object> = gettedFile
-        if(!gettedFile) images = [{images:"No Images"}]
         const gettedData = {
             id:blogId,
             title: gettedBlog.title,
             description: gettedBlog.description,
             paragraph: gettedBlog.paragraph,
-            images: images
+            images: gettedFile
         }
         return retHandler(200, false, "Get Blog Success", gettedData)
     } catch (error) {

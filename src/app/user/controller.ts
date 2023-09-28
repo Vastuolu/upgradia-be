@@ -2,11 +2,9 @@ import {Request, Response} from 'express'
 import {respond} from '../../helper/response'
 import { emailValidation } from '../../helper/emailValidation'
 import { hashing } from "../../middleware/hashing";
-
 import { createUser, getUsers, getUserById, updateUser, deleteUser, login} from './service'
 
 export async function getMethod(req: Request, res:Response) {
-    console.log(req.body)
     const {data,message,status,isError} = await getUsers()
     return respond(status,isError, message, data, res)
 }
@@ -21,7 +19,7 @@ export async function postMethod(req:Request,res:Response){
     if (!username || !email || !password) {
         return respond(400, true, "Some fields are still empty", null, res)
     }
-    if(!emailValidation(email,res)) return
+    if(!emailValidation(email,res)) return respond(400, true, "Email format wrong", null, res)
         const {data,isError,message,status} = await createUser(username, email, password)
         return respond(status,isError, message, data, res)
 }

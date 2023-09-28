@@ -26,6 +26,7 @@ export async function saveFileProject(files: string, projectId: number){
            })
            return file
     }catch(error){
+        console.log(error)
         throw Error
     }
 }

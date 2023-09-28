@@ -13,8 +13,8 @@ export async function getMethodId(req:Request, res:Response) {
 }
 
 export async function postMethod(req:Request, res:Response) {
-    const {title, description, images, paragraph} = req.body
-    if(!title||!description||!images||!paragraph){
+    const {title, description, paragraph} = req.body
+    if(!title||!description||!paragraph){
         return respond(400, true, "Some Fields are Still Empty", null, res)
     }
     const {data, message, status, isError} = await createBlog(title,description,paragraph)

@@ -10,9 +10,7 @@ const prisma = new PrismaClient()
 
 export async function getUsers(){
     try {
-        console.log('You get here')
         const gettedUser = await prisma.user.findMany()
-        console.log(gettedUser)
         if(!gettedUser || gettedUser.length === 0) return retHandler(404, true, "Table User is empty", null)
         return retHandler(200, false, "Get Users Success", gettedUser)
     } catch (error) {
@@ -31,7 +29,9 @@ export async function getUserById(id: string){
 }
 
 export async function createUser(username: string, email: string, password1: string) {
-    const password = await hashing(password1); // Await the hashing function
+    const password = await hashing(password1);
+    const thereEmail = await prisma.user.findUnique({where:{email:email}})
+    if(thereEmail) return retHandler(409, true, "Email already used", null) // Await the hashing function
     try {
         const createdUser = await prisma.user.create({
             data: {
@@ -85,7 +85,6 @@ export async function login(email:string, password:string) {
         const token = await sign(getUser.id, getUser.username as string)
         return retHandler(200, false, "Login Success", {token: token})
     } catch (error) {
-        console.log(error)
         return retHandler(500, true, "Login Error", {error: error})
     }    
 }

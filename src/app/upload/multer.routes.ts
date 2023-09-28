@@ -4,11 +4,12 @@ import { respond } from '../../helper/response'
 
 export const FileRoutes = Router()
 
-FileRoutes.post('/project/:id', upload.array('image' , 3), async (req: Request, res: Response)=>{
+FileRoutes.post('/project', upload.array('image' , 3), async (req: Request, res: Response)=>{
     try {
         const files = req.files as Express.Multer.File[]
         if(!files) return respond(304, true, "No image found", null, res)
-        const projectId = parseInt(req.params.id)
+        const projectId = parseInt(req.body.projecId)
+        // const projectId = parseInt(req.params.id)
     const createdData: Array<object> = await Promise.all(
         files.map(async (gettedFiles: Express.Multer.File) => {
             const gettedFilename = gettedFiles.originalname
@@ -28,11 +29,12 @@ FileRoutes.post('/project/:id', upload.array('image' , 3), async (req: Request, 
     }      
 )
 
-FileRoutes.post('/blog/:id', upload.array('image', 12), async (req: Request, res: Response)=>{
+FileRoutes.post('/blog', upload.array('image', 12), async (req: Request, res: Response)=>{
     try {
         const files = req.files as Express.Multer.File[]
         if(!files) return respond(304, true, "No image found", null, res)
-        const blogId = parseInt(req.params.id)
+        const blogId = parseInt(req.body.blogId)
+        // const blogId = parseInt(req.params.id)
         const createdData: Array<object> = await Promise.all(
         files.map(async (gettedFiles: Express.Multer.File) => {
             const gettedFilename = gettedFiles.originalname

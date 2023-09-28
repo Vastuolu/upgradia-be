@@ -38,7 +38,6 @@ export function auth(req: Request, res:Response, next: NextFunction){
         if(err) {
             return respond(403, true, "Forbidden", err, res)
         }
-        console.log(user)
         return next()
     })
 }

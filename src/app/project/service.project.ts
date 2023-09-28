@@ -12,14 +12,12 @@ export async function getProjects(){
         gettedProject.map(async project => {
             const projectId:number = project.id
             const gettedFile = await prisma.projectImages.findMany({where:{projectId:projectId}})
-            var images:Array<object> = gettedFile
-            if(!gettedFile) images = [{images:"No Images"}]
             const mappedData = {
                 id:projectId,
                 title: project.title,
                 url: project.url,
                 description: project.description,
-                images: images
+                images: gettedFile
             }
             return mappedData
     }))
@@ -35,14 +33,12 @@ export async function getProjectById(id:number) {
         if(!gettedProject) return retHandler(404, true, "Project Not Found", null)
         const projectId:number = gettedProject.id
         const gettedFile = await prisma.projectImages.findMany({where:{projectId:projectId}})
-        var images:Array<object> = gettedFile
-        if(!gettedFile) images = [{images:"No Images"}]
         const gettedData = {
             id:projectId,
             title: gettedProject.title,
             url: gettedProject.url,
             description: gettedProject.description,
-            images: images
+            images: gettedFile
         }
         return retHandler(200, false, "Get Project Success", gettedData)
     } catch (error) {
