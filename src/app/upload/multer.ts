@@ -1,9 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import multer from "multer"
-import path from 'path'
 import {v4 as idmaker} from 'uuid'
-import {returnHandler as retHandler} from '../../helper/response'
-import { NextFunction } from "express"
 const prisma = new PrismaClient()
 
 const storage = multer.diskStorage({
@@ -11,14 +8,9 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/')
     },
     filename: function (req, file, cb){
-        cb(null, file.originalname)
+        cb(null, Date.now() + "_" + file.originalname)
     }
 })
-
-// export function upload(next:NextFunction){
-//     multer({storage:storage})
-//     return next()
-// }
 
 export const upload = multer({storage:storage})
 
@@ -29,13 +21,12 @@ export async function saveFileProject(files: string, projectId: number){
             data:{
                 id: idmaker(),
                 projectId: projectId,
-                filename: files
+                filename: (Date.now()+"_"+files)
             }
            })
-           console.log(files)
            return file
     }catch(error){
-        return error
+        throw Error
     }
 }
 
@@ -46,11 +37,11 @@ export async function saveFileBlog(fileName:string, blogId:number, ){
                 data: {
                     id : idmaker(),
                     blogId: blogId,
-                    filename: fileName
+                    filename: (Date.now()+"_"+fileName)
                 }    
             })
-            return retHandler(200, false, "Upload Image Succees", file)
+            return file    
     }catch(error){
-        return retHandler(500, true, "Upload Image Error", {error:error})
+        throw Error
     }
 }

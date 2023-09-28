@@ -17,19 +17,18 @@ export async function postMethod(req:Request, res:Response) {
     if(!title||!description||!images||!paragraph){
         return respond(400, true, "Some Fields are Still Empty", null, res)
     }
-    const {data, message, status, isError} = await createBlog(title,description,images,paragraph)
+    const {data, message, status, isError} = await createBlog(title,description,paragraph)
     return respond(status,isError, message, data, res)
 }
 
 export async function putMethod(req:Request, res:Response) {
     const id = parseInt(req.params.id)
-    const {title:nullTitle, description:nullDescription, images:nullImages, paragraph:nullParagraph} = req.body
-    let title, description, images, paragraph
+    const {title:nullTitle, description:nullDescription, paragraph:nullParagraph} = req.body
+    let title, description, paragraph
     if(nullTitle) title = nullTitle
     if(nullDescription) description = nullDescription
-    if(nullImages) images = nullImages
     if(paragraph) paragraph = nullParagraph
-    const {data, message, status, isError} = await updateBlog(id, title, description, images, paragraph)
+    const {data, message, status, isError} = await updateBlog(id, title, description,paragraph)
     return respond(status,isError, message, data, res)
 }
 
