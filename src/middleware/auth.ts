@@ -2,6 +2,7 @@ import * as jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Response, Request, NextFunction } from 'express';
 import {respond} from '../helper/response'
+import { error } from 'console';
 dotenv.config()
 const SECRET: jwt.Secret = process.env.SECRET || "Secret";
 
@@ -29,19 +30,15 @@ export function sign(id: string, name: string): Promise<string|undefined> {
     });
 }
     
-    export function auth(req: Request, res:Response, next: NextFunction){
-        const authHeader = req.headers.authorization
-        if(authHeader){
-            const token:string = authHeader.split(' ')[1]
-            console.log(token)
-            jwt.verify(token, SECRET, (err:any, user:any)=>{
-                if(err){
-                console.log(err)
-                return respond(400, true, "Invalid Token", {error:err}, res)            }
-                // req.user = user 
-                return next();
-            });
-        } else {
-            return respond(403, true, "Forbidden", null, res); // Hanya satu tanggapan
+export function auth(req: Request, res:Response, next: NextFunction){
+    const authHeader = req.headers.authorization
+    if(!authHeader) return respond(401, true, "Unauthorized", null, res)
+    const token = authHeader.split(' ')[1]
+    jwt.verify(token, SECRET, (err, user)=>{
+        if(err) {
+            return respond(403, true, "Forbidden", err, res)
         }
-    }
+        console.log(user)
+        return next()
+    })
+}

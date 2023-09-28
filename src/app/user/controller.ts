@@ -5,7 +5,8 @@ import { hashing } from "../../middleware/hashing";
 
 import { createUser, getUsers, getUserById, updateUser, deleteUser, login} from './service'
 
-export async function getMethod(res:Response) {
+export async function getMethod(req: Request, res:Response) {
+    console.log(req.body)
     const {data,message,status,isError} = await getUsers()
     return respond(status,isError, message, data, res)
 }

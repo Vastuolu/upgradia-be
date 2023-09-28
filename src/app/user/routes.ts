@@ -4,7 +4,7 @@ import { auth } from '../../middleware/auth'
 
 export const userRoutes = Router()
 
-userRoutes.get('/',auth, getMethod)
+userRoutes.get('/', auth, getMethod)
 userRoutes.get('/:id',auth, getMethodId)
 userRoutes.post('/', postMethod)
 userRoutes.post('/login', LoginMethod)
