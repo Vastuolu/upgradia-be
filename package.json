@@ -6,7 +6,9 @@
   "scripts": {
     "test": "nodemon index.js",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
   },
   "author": "Upgradia BackEnd",
   "license": "ISC",
