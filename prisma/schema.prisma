@@ -14,43 +14,32 @@ model User {
   password String
 }
 
-model ContentImg {
-  id     Int    @id @default(autoincrement())
-  title  String
-  url    String
-  blogId Int
-  blog   Blog   @relation(fields: [blogId], references: [id])
-
-  @@index([blogId], map: "ContentImg_blogId_fkey")
-}
-
-model ContentParagraph {
-  id          Int    @id @default(autoincrement())
-  text        String @db.VarChar(255)
-  paragraphOf Int
-  blogId      Int
-  blog        Blog   @relation(fields: [blogId], references: [id])
-
-  @@index([blogId], map: "ContentParagraph_blogId_fkey")
-}
-
 model Blog {
-  id          Int                @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   title       String
   description String
-  images      ContentImg[]
-  paragraph   ContentParagraph[]
+  paragraph   String       @db.LongText
+  images      BlogImages[]
 }
 
 model Project {
-  id    Int    @id @default(autoincrement())
-  title String
-  image String
-  url   String
+  id     Int             @id @default(autoincrement())
+  title  String
+  url    String
+  description String
+  images ProjectImages[]
 }
 
-model File {
-  id Int @id @default(autoincrement())
+model ProjectImages {
+  id        String  @id @unique
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  filename  String
+}
+
+model BlogImages {
+  id       String @id @unique
+  blog     Blog   @relation(fields: [blogId], references: [id])
+  blogId   Int
   filename String
-  path String
 }
