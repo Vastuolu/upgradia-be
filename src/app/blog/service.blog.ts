@@ -82,6 +82,7 @@ export async function deleteBlog(id:number) {
         const findBlog = await prisma.blog.findUnique({where:{id:id}})
         if(!findBlog) return retHandler(404, true, "Blog Not Found", null)
         await prisma.blog.delete({where:{id:id}})
+        await prisma.blogImages.deleteMany({where:{blogId:id}})
         return retHandler(200, false, "Delete Blog Success", null)
     } catch (error) {
         return retHandler(500, true, "Delete Blog Error", {error:error})
