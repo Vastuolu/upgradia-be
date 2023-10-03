@@ -83,6 +83,7 @@ export async function deleteProject(id:number) {
         const findUser = await prisma.project.findUnique({where:{id:id}})
         if(!findUser) return retHandler(404, true, "Project Not Found", null)
         await prisma.project.delete({where:{id:id}})
+        await prisma.projectImages.deleteMany({where:{projectId:id}})
         return retHandler(200, false, "Delete Project Success", null)
     } catch (error) {
         return retHandler(500, true, "Delete Project Error", {error:error})
