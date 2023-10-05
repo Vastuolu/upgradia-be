@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { returnHandler as retHandler } from "../../helper/response";
+import { deleteFileServer } from "../upload/multer";
 
 const prisma = new PrismaClient()
 
@@ -56,6 +57,7 @@ export async function createBlog(title:string, description:string, paragraph:str
         })
         return retHandler(200, false, "Create Blog Success", createdBlog)
     } catch (error) {
+        console.log(error)
         return retHandler(500, true, "Create Blog Error", {error:error})
     }    
 }
@@ -81,8 +83,17 @@ export async function deleteBlog(id:number) {
     try {
         const findBlog = await prisma.blog.findUnique({where:{id:id}})
         if(!findBlog) return retHandler(404, true, "Blog Not Found", null)
-        await prisma.blog.delete({where:{id:id}})
+        const gettedFile = await prisma.blogImages.findMany({where:{blogId:id}})
+        const arrayedData = await gettedFile.map(async (project) => {
+            return project.filename
+        });
+        const lengthFile:number = arrayedData.length    
+        for(var i = 0; lengthFile > i; i++){
+            const filename = await arrayedData[i]
+            await deleteFileServer(filename)
+        };
         await prisma.blogImages.deleteMany({where:{blogId:id}})
+        await prisma.blog.delete({where:{id:id}})
         return retHandler(200, false, "Delete Blog Success", null)
     } catch (error) {
         return retHandler(500, true, "Delete Blog Error", {error:error})

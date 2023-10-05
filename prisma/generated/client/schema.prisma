@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @unique
+  username String?
+  email    String  @unique
+  password String
+}
+
+model Blog {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  paragraph   String       @db.LongText
+  images      BlogImages[]
+}
+
+model Project {
+  id     Int             @id @default(autoincrement())
+  title  String
+  url    String
+  description String
+  images ProjectImages[]
+}
+
+model ProjectImages {
+  id        String  @id @unique
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  filename  String
+}
+
+model BlogImages {
+  id       String @id @unique
+  blog     Blog   @relation(fields: [blogId], references: [id])
+  blogId   Int
+  filename String
+}
