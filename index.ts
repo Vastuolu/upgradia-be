@@ -12,7 +12,6 @@ const port = process.env.PORT;
 
 app.use(express.json())
 app.use('/uploads', FileRoutes);
-
 app.use('/user', userRoutes)
 app.use('/project',projectRoutes)
 app.use('/blog', blogRoutes)

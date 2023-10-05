@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { returnHandler as retHandler } from "../../helper/response";
 import path from 'path'
+import { deleteFileServer } from "../upload/multer";
 
 const prisma = new PrismaClient()
 
@@ -82,10 +83,15 @@ export async function deleteProject(id:number) {
     try {
         const findUser = await prisma.project.findUnique({where:{id:id}})
         if(!findUser) return retHandler(404, true, "Project Not Found", null)
-        await prisma.project.delete({where:{id:id}})
+        const gettedFile = await prisma.projectImages.findMany({ where: { projectId: id } })
+        gettedFile.map(async (project) => {
+            await deleteFileServer(project.filename)
+        });
         await prisma.projectImages.deleteMany({where:{projectId:id}})
+        await prisma.project.delete({where:{id:id}})
         return retHandler(200, false, "Delete Project Success", null)
     } catch (error) {
+        console.log(error)
         return retHandler(500, true, "Delete Project Error", {error:error})
     }
 }
